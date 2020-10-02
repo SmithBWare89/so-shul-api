@@ -1,0 +1,74 @@
+const {User} = require('../models');
+
+const userController = {
+    async getAllUsers(req, res) {
+        try{
+            const userData = await User.findAll({})
+                .populate({
+                    path: 'thought',
+                    select: '-__v'
+                })
+                .select('-__v')
+                .sort({ _id: desc});
+
+            !userData
+                ? res.status(404).json({message: 'No users found!'})
+                : res.status(200).json(userData);
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async getUserById(req, res) {
+        try{
+            const userData = await User.findOne(
+                {
+                    _id: req.params.id
+                }
+            )
+            .populate({ path: 'thoughts', select: '-__v', options: { 'createdAt': desc }})
+            .select('-__v')
+
+            !userData
+                ? res.status(404).json({message: 'User not found!'})
+                : res.status(200).json(userData);
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async createNewUser(req, res) {
+        try{
+            
+            const userData = await User.create(body);
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async getAllUsers(req, res) {
+        try{
+            
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async getAllUsers(req, res) {
+        try{
+            
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async getAllUsers(req, res) {
+        try{
+            
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async getAllUsers(req, res) {
+        try{
+            
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    }
+};
