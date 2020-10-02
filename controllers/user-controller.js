@@ -22,7 +22,7 @@ const userController = {
         try{
             const userData = await User.findOne(
                 {
-                    _id: req.params.id
+                    _id: req.params.userId
                 }
             )
             .populate({ path: 'thoughts', select: '-__v', options: { 'createdAt': desc }})
@@ -49,7 +49,7 @@ const userController = {
         try{
             const userData = await User.findOneAndUpdate(
                 {
-                    _id: req.params.id
+                    _id: req.params.userId
                 },
                 body,
                 {
@@ -65,11 +65,11 @@ const userController = {
             res.status(400).json(err);
         }
     },
-    async deletedExistingUser(req, res) {
+    async deleteExistingUser(req, res) {
         try {
             const userData = await User.findOneAndDelete(
                 {
-                    _id: req.params.id
+                    _id: req.params.userId
                 }
             );
 
