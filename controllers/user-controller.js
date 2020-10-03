@@ -7,6 +7,15 @@ const userController = {
                 .find({})
                 .populate({
                     path: 'thoughts',
+                    select: '-__v',
+                    options: { 
+                        sort: { 
+                            _id: 1 
+                        }
+                    }
+                })
+                .populate({
+                    path: 'friends',
                     select: '-__v'
                 })
                 .select('-__v')
@@ -30,6 +39,10 @@ const userController = {
                         }
                     }
                 })
+                .populate({
+                    path: 'friends',
+                    select: '-__v'
+                })
                 .select('-__v')
 
             !userData
@@ -42,7 +55,6 @@ const userController = {
     async createNewUser(req, res) {
         try{
             const userData = await User.create(req.body);
-            console.log(userData);
             !userData
                 ? res.status(404).json({message: 'User not found!'})
                 : res.status(200).json(userData);
@@ -52,16 +64,31 @@ const userController = {
     },
     async updateExistingUser(req, res) {
         try{
-            const userData = await User.findOneAndUpdate(
-                {
-                    _id: req.params.userId
-                },
-                req.body,
-                {
-                    new: true,
-                    runValidators: true
-                }
-            );
+            const userData = await User
+                .findOneAndUpdate(
+                    {
+                        _id: req.params.userId
+                    },
+                    req.body,
+                    {
+                        new: true,
+                        runValidators: true
+                    }
+                )
+                .populate({ 
+                    path: 'thoughts', 
+                    select: '-__v', 
+                    options: { 
+                        sort: { 
+                            _id: 1 
+                        }
+                    }
+                })
+                .populate({
+                    path: 'friends',
+                    select: '-__v'
+                })
+                .select('-__v');
 
             !userData
                 ? res.status(404).json({message: 'Cannot find the user you wish to update!'})
@@ -106,6 +133,11 @@ const userController = {
             const friendData2 = await User.findOneAndUpdate(
                 {
                     _id: req.params.friendId
+                },
+                {
+                    $push: {
+                        friends: req.params.friendId
+                    }
                 },
                 {
                     new: true,
