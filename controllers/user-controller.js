@@ -3,30 +3,34 @@ const {User} = require('../models');
 const userController = {
     async getAllUsers(req, res) {
         try{
-            const userData = await User.findAll({})
+            const userData = await User
+                .find({})
                 .populate({
-                    path: 'thought',
+                    path: 'thoughts',
                     select: '-__v'
                 })
                 .select('-__v')
-                .sort({ _id: desc});
+                .sort({ _id: 1});
 
-            !userData
-                ? res.status(404).json({message: 'No users found!'})
-                : res.status(200).json(userData);
+            res.status(200).json(userData);
         } catch(err) {
             res.status(400).json(err);
         }
     },
     async getUserById(req, res) {
         try{
-            const userData = await User.findOne(
-                {
-                    _id: req.params.userId
-                }
-            )
-            .populate({ path: 'thoughts', select: '-__v', options: { 'createdAt': desc }})
-            .select('-__v')
+            const userData = await User
+                .findOne({_id: req.params.userId})
+                .populate({ 
+                    path: 'thoughts', 
+                    select: '-__v', 
+                    options: { 
+                        sort: { 
+                            _id: 1 
+                        }
+                    }
+                })
+                .select('-__v')
 
             !userData
                 ? res.status(404).json({message: 'User not found!'})
@@ -38,6 +42,7 @@ const userController = {
     async createNewUser(req, res) {
         try{
             const userData = await User.create(req.body);
+            console.log(userData);
             !userData
                 ? res.status(404).json({message: 'User not found!'})
                 : res.status(200).json(userData);
@@ -51,7 +56,7 @@ const userController = {
                 {
                     _id: req.params.userId
                 },
-                body,
+                req.body,
                 {
                     new: true,
                     runValidators: true
@@ -80,20 +85,70 @@ const userController = {
             res.status(400).json(err);
         }
     },
-    // async addNewFriend(req, res) {
-    //     try{
+    async addNewFriend(req, res) {
+        try{
+            const friendData1 = await User.findOneAndUpdate(
+                {
+                    _id: req.params.userId
+                },
+                {
+                    $push: {
+                        friends: req.params.friendId
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            )
+            .select('-__v');
 
-    //     } catch(err) {
-    //         res.status(400).json(err);
-    //     }
-    // },
-    // async deleteExistingFriend(req, res) {
-    //     try{
-            
-    //     } catch(err) {
-    //         res.status(400).json(err);
-    //     }
-    // }
+            const friendData2 = await User.findOneAndUpdate(
+                {
+                    _id: req.params.friendId
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            )
+            .aggregate([
+                {
+                    $group: {
+                        friends: {
+                            $addToSet: req.params.userId
+                        }
+                    }
+                }
+            ])
+            .select('-__v');
+
+            friendData1 && friendData2
+                ? res.status(200).json({friendData1, friendData2})
+                : res.status(404).json({ message: 'Unable to find the user you want to be friends with.' });
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    },
+    async deleteExistingFriend(req, res) {
+        try{
+            const friendData1 = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { friends: req.params.friendId } },
+                { new: true }                
+            );
+            const friendData2 = await User.findOneAndUpdate(
+                { _id: req.params.friendId },
+                { $pull: { friends: req.params.userId } },
+                { new: true }                
+            );
+            friendData1 && friendData2
+                ? res.status(200).json(friendData1)
+                : res.status(404).json({ message: 'Unable to find the user you want to unfriend.' });
+        } catch(err) {
+            res.status(400).json(err);
+        }
+    }
 };
 
 module.exports = userController;

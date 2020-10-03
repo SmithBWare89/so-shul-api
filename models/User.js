@@ -1,17 +1,18 @@
-const moment = require('moment');
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const userSchema = ({
+const userSchema = new Schema(
+    {
         username: {
             type: String,
             unique: true,
-            required: true,
+            required: 'Username is required.',
             trim: true
         },
         email: {
             type: String,
-            required: true,
+            required: 'Email is required.',
             unique: true,
+            trim: true,
             match: [/.+\@.+\..+/]
         },
         thoughts: [
@@ -20,12 +21,10 @@ const userSchema = ({
                 ref: 'Thought'
             }
         ],
-        friends: [
-            {
+        friends: [{
                 type: Schema.Types.ObjectId,
                 ref: 'User'
-            }
-        ]
+            }]
     },
     {
         toJSON: {
