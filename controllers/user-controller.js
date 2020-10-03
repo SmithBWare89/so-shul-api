@@ -1,4 +1,5 @@
 const {User} = require('../models');
+const Thought = require('../models/Thought');
 
 const userController = {
     async getAllUsers(req, res) {
@@ -54,11 +55,17 @@ const userController = {
     },
     async createNewUser(req, res) {
         try{
-            const userData = await User.create(req.body);
+            const userData = await User.create(
+                {
+                    username: req.body.username, 
+                    email: req.body.email
+                }
+            )
             !userData
-                ? res.status(404).json({message: 'User not found!'})
+                ? res.status(404).json({message: 'User not created!'})
                 : res.status(200).json(userData);
         } catch(err) {
+            console.log(err);
             res.status(400).json(err);
         }
     },
@@ -99,15 +106,38 @@ const userController = {
     },
     async deleteExistingUser(req, res) {
         try {
-            const userData = await User.findOneAndDelete(
+            // Find The User
+            const findUser = await User.findOne(
                 {
                     _id: req.params.userId
                 }
             );
 
-            !userData
+            if (!findUser) {
+                res.status(404).json({message: 'Cannot find a User to delete!'});
+            }
+
+            // Delete all thoughts that match the username
+            const deleteThoughts = await Thought.deleteMany(
+                {
+                    username: findUser.username
+                }
+            )
+
+            if(!deleteThoughts) {
+                res.status(404).json({message: 'Cannot find the thoughts to delete!'})
+            };
+
+            // Delete the user
+            const deleteUsers = await User.findOneAndDelete(
+                {
+                    _id: req.params.userId
+                }
+            );
+
+            deleteUsers
                 ? res.status(404).json({message: 'Cannot find the user you wish to update!'})
-                : res.status(200).json(userData);
+                : res.status(200).json(deleteUsers);
         } catch(err) {
             res.status(400).json(err);
         }
@@ -119,7 +149,7 @@ const userController = {
                     _id: req.params.userId
                 },
                 {
-                    $push: {
+                    $addToSet: {
                         friends: req.params.friendId
                     }
                 },
@@ -135,8 +165,8 @@ const userController = {
                     _id: req.params.friendId
                 },
                 {
-                    $push: {
-                        friends: req.params.friendId
+                    $addToSet: {
+                        friends: req.params.userId
                     }
                 },
                 {
@@ -144,15 +174,6 @@ const userController = {
                     runValidators: true
                 }
             )
-            .aggregate([
-                {
-                    $group: {
-                        friends: {
-                            $addToSet: req.params.userId
-                        }
-                    }
-                }
-            ])
             .select('-__v');
 
             friendData1 && friendData2
