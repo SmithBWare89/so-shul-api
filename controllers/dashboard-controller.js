@@ -17,15 +17,23 @@ const dashboardController = {
                 )
                 .select('-__v')
                 .sort({_id: -1}); //newest to oldest
-            
-            const thoughts = thoughtData.map(thought => thought.get({plain: true}));
-            res.render('dashboard', {
-                thoughts,
-                loggedIn: true
-            });
+            if (thoughtData) {
+                const thoughts = thoughtData.map(thought => thought.get({plain: true}));
+                res.render('dashboard', {
+                    thoughts,
+                    loggedIn: true
+                });
+            } else {
+                res.render('dashboard', {
+                    loggedIn: true
+                });
+            }
         } catch (error) {
             res.status(400).json(error);
         }
+    },
+    async createNewThought(req, res) {
+        
     }
 };
 

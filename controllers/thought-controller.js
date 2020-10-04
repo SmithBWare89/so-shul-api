@@ -37,19 +37,19 @@ const thoughtController = {
     // Create A New Thought
     async gottaWriteItDown(req, res){
         try{
+            console.log(req.session);
             const thoughtData = await Thought
-                .create(req.body)
-                .populate(
+                .create(
                     {
-                        path: 'username',
-                        select: 'username'
+                        thoughtText: req.body.thoughtText,
+                        username: req.session.username
                     }
                 );
 
             const userUpdate = await User
                 .findOneAndUpdate(
                     {
-                        _id: req.params.userId
+                        _id: req.session.user_id
                     },
                     {
                         $push: {
@@ -60,12 +60,12 @@ const thoughtController = {
                         new: true
                     }
                 )
-                .select('-__v');
-
+                .select('-__v -password');
             userUpdate
                 ? res.status(200).json(userUpdate)
                 : res.status(404).json({ message: 'Cannot find that user!' });
         } catch (err) {
+            console.log(err);
             res.status(400).json(err)
         }
     },

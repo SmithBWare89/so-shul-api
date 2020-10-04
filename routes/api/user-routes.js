@@ -9,20 +9,21 @@ const {
     addNewFriend,
     deleteExistingFriend
 } = require('../../controllers/user-controller');
+const withAuth = require('../../utils/auth');
 
 router
-    .route('/')
+    .route('/', withAuth)
     .get(getAllUsers)
     .post(createNewUser);
 
 router
-    .route('/:userId')
+    .route('/:userId', withAuth)
     .get(getUserById)
     .put(updateExistingUser)
     .delete(deleteExistingUser);
 
 router
-    .route('/:userId/friends/:friendId')
+    .route('/:userId/friends/:friendId', withAuth)
     .post(addNewFriend)
     .delete(deleteExistingFriend);
 

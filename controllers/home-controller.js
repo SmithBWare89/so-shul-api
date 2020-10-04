@@ -3,7 +3,7 @@ const {User, Thought} = require('../models');
 const homeController = {
     async sendHomePage(req, res) {
         try {
-            req.session.username
+            req.session.loggedIn
                 ? res.render("homepage", {
                         loggedIn: true
                 })
@@ -32,7 +32,9 @@ const homeController = {
     },
     async renderDashboard(req, res) {
         try {
-            res.status(200).render("dashboard");
+            req.session.loggedIn
+            ? res.status(200).render("dashboard")
+            : res.status(404).render("homepage")
         } catch (err) {
             res.status(400).json(err);
         }

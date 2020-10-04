@@ -9,33 +9,31 @@ const {
     deleteReaction
 } = require('../../controllers/thought-controller');
 
+const withAuth = require('../../utils/auth');
+
 // Get All Thoughts
 router
-    .route('/')
+    .route('/', withAuth)
     .get(gatherMyThoughts)
-
-// Create A New Thought
-router
-    .route('/:userId')
     .post(gottaWriteItDown);
 
 // Get Thought By Id
 router
-    .route('/:thoughtId')
+    .route('/:thoughtId', withAuth)
     .get(thatRemindsMe);
 
 // Update And Delete Thought
 router
-    .route('/:userId/:thoughtId')
+    .route('/:userId/:thoughtId', withAuth)
     .put(onSecondThought)
     .delete(ahForgetIt);
 
 router
-    .route('/:thoughtId/reactions')
+    .route('/:thoughtId/reactions', withAuth)
     .post(createReaction)
 
 router
-    .route('/:thoughtId/reactions/:reactionId')
+    .route('/:thoughtId/reactions/:reactionId', withAuth)
     .delete(deleteReaction)
 
 module.exports = router;

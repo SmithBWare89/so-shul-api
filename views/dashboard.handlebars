@@ -1,24 +1,8 @@
-<section>
-  <h2>Add A New Thought</h2>
-
-  <form class="new-thought-form">
-    <div>
-      <label for="thought-title">Title</label>
-      <input type="text" id="thought-title" name="thought-title" />
-    </div>
-    <div>
-      <label for="thought-url">Link</label>
-      <input id="thought-url" name="thought-url" />
-    </div>
-    <button type="submit" class="btn">Create</button>
-  </form>
-</section>
-
-{{#if thought.length}}
+{{#if thoughts.length}}
 <section>
   <h2>Your Posts</h2>
   <ol>
-    {{#each thought as |thought|}}
+    {{#each thoughts as |thought|}}
     <li>
       {{> thought-info thought}}
       <a href="/dashboard/edit/{{thought._id}}" class="edit-link">Edit post</a>
@@ -26,6 +10,18 @@
     {{/each}}
   </ol>
 </section>
+{{else}}
+<section>
+  <h2>Add A New Thought</h2>
+
+  <form class="new-thought-form">
+    <div>
+    <label for="thought-text">Thought Info</label>
+    <textarea name="thought-text" id="thought-text"></textarea>
+    </div>
+    <button type="submit" class="btn">Create</button>
+  </form>
+</section>
 {{/if}}
 
-<script src="/javascript/add-post.js"></script>
+<script src="/javascript/dashboard.js"></script>
