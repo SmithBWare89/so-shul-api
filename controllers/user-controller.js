@@ -58,15 +58,21 @@ const userController = {
             const userData = await User.create(
                 {
                     username: req.body.username, 
-                    email: req.body.email
+                    email: req.body.email,
+                    password: req.body.password
                 }
-            )
-            !userData
-                ? res.status(404).json({message: 'User not created!'})
-                : res.status(200).json(userData);
+            );
+            if (userData) {
+                req.session.save(() => {
+                    req.session.username = userData.username;
+                    req.session.user_id = userData._id;
+                    req.session.loggedIn = true;
+                    res.json(userData);
+                })
+            };
         } catch(err) {
             console.log(err);
-            res.status(400).json(err);
+            res.status(500).json(err);
         }
     },
     async updateExistingUser(req, res) {
