@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Just Tech News</title>
+  <link rel="stylesheet" href="/stylesheets/styles.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>
+        <a href="javascript:;"id="soshul-banner" class="ml6">
+          <span class="text-wrapper">
+            <span class="letters">
+              So-Shul Network!
+            </span>
+          </span>
+        </a>
+      </h1>
+      <nav>
+        <a href="/homepage">homepage</a>
+        {{#if loggedIn}}
+        <a href="/dashboard">dashboard</a>
+        <button id="logout" class="btn-no-style">logout</button>
+        {{else}}
+        <a href="/login">login</a>
+        {{/if}}
+      </nav>
+    </header>
+    <main>
+      {{{ body }}}
+    </main>
+    <footer>
+      Thanks for visiting!
+    </footer>
+  </div>
+  
+  {{#if loggedIn}}
+  <script src="/javascript/logout.js"></script>
+  {{else}}
+  <script src="/javascript/logout.js"></script>
+  {{/if}}
+  <script src="/javascript/homepage.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+</body>
+
+</html>

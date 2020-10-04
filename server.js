@@ -1,36 +1,53 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const db = mongoose.connection;
-const MongoDBStore = require('connect-mongodb-session')(session);
+const path = require('path');
+const session = require('express-session');
 
+// Mongo & Mongoose Connection Variables
+const db = mongoose.connection;
+const MongoStore = require('connect-mongo')(session);
+
+// Express & PORT Variables
 const app = express();
 const PORT = process.env.PORT || 3001;
-const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI || 'mongodb://localhost/so-shul',
-  collection: 'so-shul'
-});
 
+// HandleBars
+const exphbs = require('express-handlebars');
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
+
+// Set Up Express Connection
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Set Up Mongoose Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/so-shul', {
   useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
-app.use(require('express-session'))
+// Set Up MongoDB Connection
+app.use(session({
+  secret: 'My super secret cookie',
+  cookie: {},
+  store: new MongoStore({mongooseConnection: db}),
+  resave: true,
+  saveUninitialized: true
+}));
+
 
 // Use this to log mongo queries being executed!
 mongoose.set('debug', true);
 
 // Error handling for database
 db.on('error', console.error.bind(console, 'connection error:'));
-store.on('error', function(error) {console.log(error)});
 
 // Connect to the DB
 db.once('open', function() {
     app.use(require('./routes'));
     app.listen(PORT, () => console.log(`🌍 Connected on localhost:${PORT}`));
-})
+});
