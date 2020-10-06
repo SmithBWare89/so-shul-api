@@ -1,5 +1,6 @@
 const thoughtForm = document.querySelector(".new-thought-form");
-const deleteBtn = document.querySelector("#delete-button");
+const deleteUserBtn = document.querySelector("#delete-button");
+const deleteThoughtButton = document.querySelector("#delete-thought");
 
 async function submitThoughtForm(event) {
     try {
@@ -45,12 +46,35 @@ async function deleteExistingUser (event) {
     }
 }
 
-thoughtForm.onclick = function(event) {
-    event.preventDefault();
-    const element = event.target;
-    if (element.nodeName === 'BUTTON') {
-        return submitThoughtForm(event);
+async function deleteThought(event) {
+    try {
+        event.preventDefault();
+        const thoughtId = event.target.closest("li").getAttribute("data-thought_id");
+        const response = await fetch('/dashboard', {
+            method: "delete",
+            body: JSON.stringify({
+                thoughtId
+            }),
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if(response.ok) {
+            location.reload();
+        } else {
+            alert(response.statusText);
+            return;
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 
-deleteBtn.addEventListener("click", deleteExistingUser)
+document.onclick = function(event) {
+    event.preventDefault();
+    const element = event.target;
+    if (element.getAttribute("id") === "create-button") {
+        return submitThoughtForm(event);
+    } else if (element.getAttribute("id") === "delete-thought") {
+        return deleteThought(event);
+    }
+}

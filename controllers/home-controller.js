@@ -229,7 +229,7 @@ const homeController = {
             const thoughtData = await Thought
                 .findOneAndDelete(
                     {
-                        _id: req.params.thoughtId
+                        _id: req.body.thoughtId
                     }
                 );
             
@@ -239,8 +239,8 @@ const homeController = {
 
             const userUpdate = await User
                 .findOneAndUpdate(
-                    { _id: req.params.userId },
-                    { $pull: { thoughts: req.params.thoughtId } },
+                    { _id: req.session.user_id },
+                    { $pull: { thoughts: req.body.thoughtId } },
                     { new: true }
                 )
                 .select('-__v');

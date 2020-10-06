@@ -126,7 +126,7 @@ const thoughtController = {
                 )
                 .select('-__v');
 
-            userUpdate
+            userUpdate && thoughtData
                 ? res.status(200).json(userUpdate)
                 : res.status(404).json({message: 'Cannot find a user that matches that thought!'});
         } catch (err) {
