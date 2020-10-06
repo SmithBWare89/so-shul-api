@@ -1,4 +1,4 @@
-# [So-Shul Network API](http://www.github.com/SmithBWare89/so-shul-api)
+# [So-Shul Network API](http://www.github.com/SmithBWare89/so-shul-api) -- [Deployed](https://git.heroku.com/so-shul.git)
 
 ## Description
 This project is intended to be a demonstration of a RESTful API using a combination of MongoDB, Express, Mongoose, and Moment. It's been expanded to include a minimalist front end to allow for a web app representation of the data being created in our database. Further developments for this project would be to update the formatting of the project along with streamlining the API routes.
