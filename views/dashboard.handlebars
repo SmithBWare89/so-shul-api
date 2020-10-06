@@ -1,16 +1,8 @@
-{{#if thoughts.length}}
 <section>
-  <h2>Your Posts</h2>
-  <ol>
-    {{#each thoughts as |thought|}}
-    <li>
-      {{> thought-info thought}}
-      <a href="/dashboard/edit/{{thought._id}}" class="edit-link">Edit post</a>
-    </li>
-    {{/each}}
-  </ol>
+  <h2>Delete Your Profile</h2>
+  <button type="submit" class="btn" id="delete-button">Delete Profile</button>
 </section>
-{{else}}
+
 <section>
   <h2>Add A New Thought</h2>
 
@@ -21,6 +13,27 @@
     </div>
     <button type="submit" class="btn">Create</button>
   </form>
+</section>
+
+{{#if thoughtData.length}}
+<section>
+  <h2>Your Thoughts</h2>
+  <ol>
+    {{#each thoughtData as |thought|}}
+    <li>
+      <article class="post">
+      <div class="title">
+        <h1>{{thought.username}} Thought</h1>
+      </div>
+      <div class="meta">
+          <p>{{thought.thoughtText}}</p>
+        {{!-- <a href="/post/{{id}}">{{reactions.length}} {{format_plural "reaction" reactions.length}}</a> --}}
+      </div>
+      </article>      
+      <a href="/dashboard/edit/{{thought._id}}" class="edit-link">Edit post</a>
+    </li>
+    {{/each}}
+  </ol>
 </section>
 {{/if}}
 

@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const {sendHomePage, renderLogin, renderLogout, renderDashboard} = require('../controllers/home-controller');
+const {sendHomePage, renderLogin, renderLogout, renderDashboard, renderSignup, loginUser, logoutUser, deleteUser, createNewUser, createNewThought} = require('../controllers/home-controller');
+const withAuth = require('../utils/auth');
 
 router
     .route('/')
@@ -12,13 +13,22 @@ router
 router
     .route('/login')
     .get(renderLogin)
+    .post(loginUser)
 
 router
-    .route('/logout')
+    .route('/signup')
+    .get(renderSignup)
+    .post(createNewUser)
+
+router
+    .route('/logout', withAuth)
     .get(renderLogout)
+    .post(logoutUser)
 
 router
-    .route('/dashboard')
+    .route('/dashboard', withAuth)
     .get(renderDashboard)
+    .post(createNewThought)
+    .delete(deleteUser)
 
 module.exports = router;

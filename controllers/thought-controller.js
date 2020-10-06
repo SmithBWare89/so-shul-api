@@ -37,19 +37,18 @@ const thoughtController = {
     // Create A New Thought
     async gottaWriteItDown(req, res){
         try{
-            console.log(req.session);
             const thoughtData = await Thought
                 .create(
                     {
                         thoughtText: req.body.thoughtText,
-                        username: req.session.username
+                        username: req.body.username
                     }
                 );
 
             const userUpdate = await User
                 .findOneAndUpdate(
                     {
-                        _id: req.session.user_id
+                        _id: req.params.userId
                     },
                     {
                         $push: {

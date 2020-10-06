@@ -62,14 +62,8 @@ const userController = {
                     password: req.body.password
                 }
             );
-            if (userData) {
-                req.session.save(() => {
-                    req.session.username = userData.username;
-                    req.session.user_id = userData._id;
-                    req.session.loggedIn = true;
-                    res.json(userData);
-                })
-            };
+            
+            res.status(200).json(userData);
         } catch(err) {
             console.log(err);
             res.status(500).json(err);
@@ -141,7 +135,7 @@ const userController = {
                 }
             );
 
-            deleteUsers
+            !deleteUsers
                 ? res.status(404).json({message: 'Cannot find the user you wish to update!'})
                 : res.status(200).json(deleteUsers);
         } catch(err) {
