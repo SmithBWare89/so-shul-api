@@ -20,7 +20,7 @@
   <h2>Your Thoughts</h2>
   <ol>
     {{#each thoughtData as |thought|}}
-    <li>
+    <li data-thought_id="{{thought._id}}">
       <article class="post">
       <div class="title">
         <h1>{{thought.username}} Thought</h1>
@@ -30,7 +30,7 @@
         {{!-- <a href="/post/{{id}}">{{reactions.length}} {{format_plural "reaction" reactions.length}}</a> --}}
       </div>
       </article>      
-      <a href="/dashboard/edit/{{thought._id}}" class="edit-link">Edit post</a>
+      <a href="/dashboard/edit/{{thought._id}}" class="delete-link">Delete post</a>
     </li>
     {{/each}}
   </ol>

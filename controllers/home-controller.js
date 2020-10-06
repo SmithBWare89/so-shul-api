@@ -224,6 +224,34 @@ const homeController = {
             res.status(400).json(err)
         }
     },
+    async deleteNewThought(req, res){
+        try{
+            const thoughtData = await Thought
+                .findOneAndDelete(
+                    {
+                        _id: req.params.thoughtId
+                    }
+                );
+            
+            if(!thoughtData){
+                res.status(404).json({ message: 'No thought with this ID!' });
+            }
+
+            const userUpdate = await User
+                .findOneAndUpdate(
+                    { _id: req.params.userId },
+                    { $pull: { thoughts: req.params.thoughtId } },
+                    { new: true }
+                )
+                .select('-__v');
+
+            userUpdate
+                ? res.status(200).json(userUpdate)
+                : res.status(404).json({message: 'Cannot find a user that matches that thought!'});
+        } catch (err) {
+            res.status(400).json(err)
+        }
+    },
 }
 
 module.exports = homeController;
