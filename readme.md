@@ -1,4 +1,4 @@
-# [So-Shul Network API](http://www.github.com/SmithBWare89/so-shul-api) -- [Deployed](https://git.heroku.com/so-shul.git)
+# [So-Shul Network API](http://www.github.com/SmithBWare89/so-shul-api) -- [Deployed](https://so-shul.herokuapp.com/)
 
 ## Description
 This project is intended to be a demonstration of a RESTful API using a combination of MongoDB, Express, Mongoose, and Moment. It's been expanded to include a minimalist front end to allow for a web app representation of the data being created in our database. Further developments for this project would be to update the formatting of the project along with streamlining the API routes.
@@ -20,7 +20,7 @@ SO THAT my website can handle large amounts of unstructured data
 * [Questions](#questions)
 
 ## Installation
-You can visit the deployed [web application](https://git.heroku.com/so-shul.git) which is in it's development phase or by cloning the repository, installing the node packages using the `npm i` in your command line, and then running `npm start` to start your connection.
+You can visit the deployed [web application](https://so-shul.herokuapp.com/) which is in it's development phase or by cloning the repository, installing the node packages using the `npm i` in your command line, and then running `npm start` to start your connection.
 
 #### Walkthrough of how to test and generate a User.
 [![User Routes Walkthrough](./assets/images/user-routes.gif)](https://youtu.be/aIUjCNlWDxg)
