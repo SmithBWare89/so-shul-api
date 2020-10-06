@@ -1,6 +1,7 @@
 const thoughtForm = document.querySelector(".new-thought-form");
 const deleteUserBtn = document.querySelector("#delete-button");
 const deleteThoughtButton = document.querySelector("#delete-thought");
+const saveRecord = require('./idb');
 
 async function submitThoughtForm(event) {
     try {
@@ -25,6 +26,7 @@ async function submitThoughtForm(event) {
         }
     } catch(err) {
         console.log(err);
+        saveRecord(formData);
     }
 }
 
@@ -76,5 +78,7 @@ document.onclick = function(event) {
         return submitThoughtForm(event);
     } else if (element.getAttribute("id") === "delete-thought") {
         return deleteThought(event);
+    } else if (element.getAttribute("id") === "delete-user") {
+        return deleteExistingUser();
     }
 }
