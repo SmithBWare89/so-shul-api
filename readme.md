@@ -20,7 +20,7 @@ SO THAT my website can handle large amounts of unstructured data
 * [Questions](#questions)
 
 ## Installation
-You can visit the deployed [web application](https://so-shul-api.herokuapp.com/) which is in it's development phase or by cloning the repository, installing the node packages using the `npm i` in your command line, and then running `npm start` to start your connection.
+You can visit the deployed [web application](https://git.heroku.com/so-shul.git) which is in it's development phase or by cloning the repository, installing the node packages using the `npm i` in your command line, and then running `npm start` to start your connection.
 
 #### Walkthrough of how to test and generate a User.
 [![User Routes Walkthrough](./assets/images/user-routes.gif)](https://youtu.be/aIUjCNlWDxg)
