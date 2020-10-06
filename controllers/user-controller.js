@@ -113,20 +113,23 @@ const userController = {
                 }
             );
 
-            if (!findUser) {
-                res.status(404).json({message: 'Cannot find a User to delete!'});
-            }
-
             // Delete all thoughts that match the username
             const deleteThoughts = await Thought.deleteMany(
                 {
                     username: findUser.username
                 }
-            )
+            );
 
-            if(!deleteThoughts) {
-                res.status(404).json({message: 'Cannot find the thoughts to delete!'})
-            };
+            const friendsData = await User.updateMany(
+                {
+                    friends: req.params.userId
+                },
+                {
+                    $pull: {
+                        friends: req.params.userId
+                    }
+                }
+            );
 
             // Delete the user
             const deleteUsers = await User.findOneAndDelete(
@@ -135,9 +138,9 @@ const userController = {
                 }
             );
 
-            !deleteUsers
-                ? res.status(404).json({message: 'Cannot find the user you wish to update!'})
-                : res.status(200).json(deleteUsers);
+            findUser && deleteThoughts && deleteUsers && friendsData
+                ? res.status(200).json({findUser, deleteThoughts, deleteUsers, friendsData})
+                : res.status(404).json({message: 'Cannot find the user you wish to update!'})
         } catch(err) {
             res.status(400).json(err);
         }
