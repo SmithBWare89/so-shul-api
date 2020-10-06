@@ -158,6 +158,19 @@ const userController = {
                     runValidators: true
                 }
             )
+            .populate({
+                path: 'thoughts',
+                select: '-__v',
+                options: { 
+                    sort: { 
+                        _id: 1 
+                    }
+                }
+            })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
             .select('-__v');
 
             const friendData2 = await User.findOneAndUpdate(
@@ -174,6 +187,19 @@ const userController = {
                     runValidators: true
                 }
             )
+            .populate({
+                path: 'thoughts',
+                select: '-__v',
+                options: { 
+                    sort: { 
+                        _id: 1 
+                    }
+                }
+            })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
             .select('-__v');
 
             friendData1 && friendData2
@@ -189,12 +215,42 @@ const userController = {
                 { _id: req.params.userId },
                 { $pull: { friends: req.params.friendId } },
                 { new: true }                
-            );
+            )
+            .populate({
+                path: 'thoughts',
+                select: '-__v',
+                options: { 
+                    sort: { 
+                        _id: 1 
+                    }
+                }
+            })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
+            .select('-__v');
+
             const friendData2 = await User.findOneAndUpdate(
                 { _id: req.params.friendId },
                 { $pull: { friends: req.params.userId } },
                 { new: true }                
-            );
+            )
+            .populate({
+                path: 'thoughts',
+                select: '-__v',
+                options: { 
+                    sort: { 
+                        _id: 1 
+                    }
+                }
+            })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
+            .select('-__v');
+
             friendData1 && friendData2
                 ? res.status(200).json(friendData1)
                 : res.status(404).json({ message: 'Unable to find the user you want to unfriend.' });

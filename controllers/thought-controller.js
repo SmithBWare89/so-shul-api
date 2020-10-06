@@ -48,7 +48,7 @@ const thoughtController = {
             const userUpdate = await User
                 .findOneAndUpdate(
                     {
-                        _id: req.params.userId
+                        _id: req.body.userId
                     },
                     {
                         $push: {
@@ -60,6 +60,7 @@ const thoughtController = {
                     }
                 )
                 .select('-__v -password');
+
             userUpdate
                 ? res.status(200).json(userUpdate)
                 : res.status(404).json({ message: 'Cannot find that user!' });
@@ -150,6 +151,7 @@ const thoughtController = {
                     }
                 )
                 .select('-__v');
+                
             reactionData
                 ? res.status(200).json(reactionData)
                 : res.status(404).json({ message: 'Cannot find the thought you are reacting to.'});

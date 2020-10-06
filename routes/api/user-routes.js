@@ -12,18 +12,18 @@ const {
 const withAuth = require('../../utils/auth');
 
 router
-    .route('/', withAuth)
+    .route('/')
     .get(getAllUsers)
     .post(createNewUser);
 
 router
-    .route('/:userId', withAuth)
+    .route('/:userId')
     .get(getUserById)
     .put(updateExistingUser)
     .delete(deleteExistingUser);
 
 router
-    .route('/:userId/friends/:friendId', withAuth)
+    .route('/:userId/friends/:friendId')
     .post(addNewFriend)
     .delete(deleteExistingFriend);
 

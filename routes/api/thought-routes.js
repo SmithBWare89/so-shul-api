@@ -13,27 +13,28 @@ const withAuth = require('../../utils/auth');
 
 // Get All Thoughts
 router
-    .route('/', withAuth)
+    .route('/')
     .get(gatherMyThoughts)
     .post(gottaWriteItDown);
 
 // Get Thought By Id
 router
-    .route('/:thoughtId', withAuth)
+    .route('/:thoughtId')
     .get(thatRemindsMe);
 
 // Update And Delete Thought
 router
-    .route('/:userId/:thoughtId', withAuth)
+    .route('/:userId/:thoughtId')
     .put(onSecondThought)
     .delete(ahForgetIt);
 
 router
-    .route('/:thoughtId/reactions', withAuth)
+    .route('/:thoughtId/reactions')
     .post(createReaction)
 
 router
-    .route('/:thoughtId/reactions/:reactionId', withAuth)
+    .route('/:thoughtId/reactions/:reactionId')
     .delete(deleteReaction)
+
 
 module.exports = router;
