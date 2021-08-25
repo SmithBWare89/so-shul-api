@@ -9,7 +9,6 @@ const {
     addNewFriend,
     deleteExistingFriend
 } = require('../../controllers/user-controller');
-const withAuth = require('../../utils/auth');
 
 router
     .route('/')
